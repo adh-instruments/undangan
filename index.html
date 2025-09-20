@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Silaturahmi Keluarga Ali Tena</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
     
     <!-- Tailwind CSS via CDN - For development only -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -65,6 +66,20 @@
 
         .fade-in-up {
             animation: fadeInUp 1s ease-out forwards;
+        }
+
+        #audio-hint {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            animation: fadeInHint 0.5s ease-out 1s forwards;
+        }
+
+        @keyframes fadeInHint {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
@@ -147,6 +162,15 @@
         </svg>
     </button>
 
+    <!-- Audio Hint Popup -->
+    <div id="audio-hint" class="fixed bottom-24 right-6 bg-white/90 p-4 rounded-lg shadow-lg z-50 flex items-start space-x-4 max-w-xs">
+        <span class="text-2xl mt-1">🎵</span>
+        <div class="flex-grow">
+            <p class="text-sm text-gray-700">Klik tombol play untuk mendengarkan musik latar.</p>
+        </div>
+        <button id="close-hint" class="text-gray-500 hover:text-gray-800">&times;</button>
+    </div>
+
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
         <!-- Header Section -->
@@ -159,7 +183,7 @@
                     Keluarga Besar Ali Tena
                 </h2>
                 <p class="text-lg text-gray-600">
-                    Kepada Yth. Keluarga Besar Ali Tena
+                    Kepada Yth. Keluarga Besar Ali Tena di Manapun Berada
                 </p>
             </div>
         </header>
@@ -250,7 +274,7 @@
                 <div class="space-y-2 text-lg">
                     <p>Seluma: <span class="text-primary font-semibold">Mely Susita</span></p>
                     <p>Curup: <span class="text-primary font-semibold">Fajar Sa'idah</span></p>
-                    <p>Kepahiang: <span class="text-primary font-semibold">Win Khadija</span></p>
+                    <p>Kepahiang: <span class="text-primary font-semibold">Win Hadijah</span></p>
                 </div>
             </div>
         </section>
@@ -346,6 +370,20 @@
 
         // Intersection Observer for fade-in animations
         document.addEventListener('DOMContentLoaded', () => {
+            const audioHint = document.getElementById('audio-hint');
+            const closeHint = document.getElementById('close-hint');
+            const audioControl = document.getElementById('audio-control');
+
+            const hideHint = () => {
+                audioHint.style.opacity = '0';
+                setTimeout(() => {
+                    audioHint.style.display = 'none';
+                }, 500);
+            };
+
+            closeHint.addEventListener('click', hideHint);
+            audioControl.addEventListener('click', hideHint, { once: true });
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
